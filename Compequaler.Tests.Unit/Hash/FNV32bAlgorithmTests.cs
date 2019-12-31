@@ -9,13 +9,6 @@ namespace Compequaler.Tests.Unit.Hash
 {
     public class FNV32bAlgorithmTests
     {
-        public FNV32bAlgorithmTests(ITestOutputHelper output)
-        {
-            Output = output;
-        }
-
-        private ITestOutputHelper Output { get; }
-
         [Theory]
         [InlineData(FNVAlgorithm._factor32, 1, 0)]
         [InlineData(FNVAlgorithm._factor32, 0, 1)]
