@@ -33,5 +33,11 @@ namespace Compequaler.Hash
 
         public static implicit operator int(RuntimeHash hashes)
             => hashes.GetHashCode();
+
+        public static bool operator ==(RuntimeHash first, RuntimeHash second)
+            => first.Equals(second);
+
+        public static bool operator !=(RuntimeHash first, RuntimeHash second)
+            => !first.Equals(second);
     }
 }
