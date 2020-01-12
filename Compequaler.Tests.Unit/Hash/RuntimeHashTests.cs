@@ -13,7 +13,7 @@ namespace Compequaler.Tests.Unit.Hash
         public RuntimeHashTests()
         {
             Fixture = new Fixture();
-            Fixture.Register(() => new RuntimeHash(Fixture.Create<int>()));
+            Fixture.Register(() => new RuntimeHash(Fixture.Create<uint>()));
         }
 
         private Fixture Fixture { get; }
@@ -27,7 +27,7 @@ namespace Compequaler.Tests.Unit.Hash
 
         [Theory]
         [InlineAutoData()]
-        public void SameHashesShouldEquate(int hashes)
+        public void SameHashesShouldEquate(uint hashes)
         {
             var sut1 = new RuntimeHash(hashes);
             var sut2 = new RuntimeHash(hashes);
@@ -46,7 +46,7 @@ namespace Compequaler.Tests.Unit.Hash
 
         [Theory]
         [InlineAutoData()]
-        public void SameGenericHashesShouldEquate(int hashes)
+        public void SameGenericHashesShouldEquate(uint hashes)
         {
             var sut1 = new RuntimeHash(hashes);
             var sut2 = new RuntimeHash(hashes);

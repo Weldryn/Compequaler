@@ -6,12 +6,12 @@ namespace Compequaler.Hash
 {
     public readonly struct RuntimeHash : IEquatable<RuntimeHash>
     {
-        internal RuntimeHash(int hashes)
+        internal RuntimeHash(uint hashes)
         {
             Hashes = hashes;
         }
 
-        internal int Hashes { get; }
+        internal uint Hashes { get; }
 
         public override bool Equals(object obj)
         {
