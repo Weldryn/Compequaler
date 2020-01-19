@@ -26,7 +26,7 @@ namespace Compequaler.Hash
             => Hashes == other.Hashes;
 
         public override int GetHashCode()
-            => FNVAlgorithm.XORFolding32to31(Hashes);
+            => FNV1aAlgorithm.XORFold31(Hashes);
 
         public override string ToString()
             => GetHashCode().ToString();

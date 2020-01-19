@@ -6,6 +6,6 @@ namespace Compequaler.Hash
 {
     public static class Hasher
     {
-        public static RuntimeHash Seed { get; } = new RuntimeHash(FNVAlgorithm._seed32);
+        public static RuntimeHash Seed { get; } = new RuntimeHash(FNV1aAlgorithm._seed32bits);
     }
 }

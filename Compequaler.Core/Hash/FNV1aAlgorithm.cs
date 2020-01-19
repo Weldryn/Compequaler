@@ -5,24 +5,18 @@ using System.Text;
 
 namespace Compequaler.Hash
 {
-    internal static class FNVAlgorithm
+    internal static class FNV1aAlgorithm
     {
-        public const uint _factor32 = 16777619;
+        public const uint _factor32bits = 16777619;
 
-        public const uint _seed32 = 2166136261;
+        public const uint _seed32bits = 2166136261;
 
-        public const int _xorFolding32to31Mask = 0x7FFF_FFFF;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FNV1a32Fast(uint hashes, int hashCode)
-            => FNV1a32Fast(hashes, unchecked((uint)hashCode));
-
-        public static uint FNV1a32Fast(uint hashes, uint hashCode)
         {
             unchecked
             {
-                hashes ^= hashCode;
-                hashes *= _factor32;
+                hashes ^= (uint)hashCode;
+                hashes *= _factor32bits;
             }
             return hashes;
         }
@@ -36,19 +30,19 @@ namespace Compequaler.Hash
             unchecked
             {
                 hashes ^= hashCode & 0xFF;
-                hashes *= _factor32;
+                hashes *= _factor32bits;
                 hashes ^= (hashCode >> 8) & 0xFF;
-                hashes *= _factor32;
+                hashes *= _factor32bits;
                 hashes ^= (hashCode >> 16) & 0xFF;
-                hashes *= _factor32;
+                hashes *= _factor32bits;
                 hashes ^= (hashCode >> 24) & 0xFF;
-                hashes *= _factor32;
+                hashes *= _factor32bits;
             }
             return hashes;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int XORFolding32to31(uint hashes)
-            => unchecked((int)((hashes >> 31) ^ (hashes & _xorFolding32to31Mask)));
+        public static int XORFold31(uint hashes)
+            => unchecked((int)((hashes >> 31) ^ (hashes & 0x7FFF_FFFFu)));
     }
 }
