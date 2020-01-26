@@ -11,15 +11,28 @@ namespace Compequaler.Hash
 
         public const uint _seed32bits = 2166136261;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint FNVWithSeed(int hashCode)
+            => FNV(_seed32bits, hashCode);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint FNVWithSeed(uint hashCode)
+            => FNV(_seed32bits, hashCode);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint FNV(uint hashes, int hashCode)
+            => FNV1a32Fast(hashes, hashCode);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint FNV(uint hashes, uint hashCode)
+            => FNV1a32Fast(hashes, hashCode);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FNV1a32Fast(uint hashes, int hashCode)
-        {
-            unchecked
-            {
-                hashes ^= (uint)hashCode;
-                hashes *= _factor32bits;
-            }
-            return hashes;
-        }
+            => FNV1a32Fast(hashes, unchecked((uint)hashCode));
+
+        public static uint FNV1a32Fast(uint hashes, uint hashCode)
+            => unchecked((hashes ^ hashCode) * _factor32bits);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FNV1a32(uint hashes, int hashCode)
@@ -29,14 +42,10 @@ namespace Compequaler.Hash
         {
             unchecked
             {
-                hashes ^= hashCode & 0xFF;
-                hashes *= _factor32bits;
-                hashes ^= (hashCode >> 8) & 0xFF;
-                hashes *= _factor32bits;
-                hashes ^= (hashCode >> 16) & 0xFF;
-                hashes *= _factor32bits;
-                hashes ^= (hashCode >> 24) & 0xFF;
-                hashes *= _factor32bits;
+                hashes = (hashes ^ hashCode & 0xFF) * _factor32bits;
+                hashes = (hashes ^ (hashCode >> 8) & 0xFF) * _factor32bits;
+                hashes = (hashes ^ (hashCode >> 16) & 0xFF) * _factor32bits;
+                hashes = (hashes ^ (hashCode >> 24) & 0xFF) * _factor32bits;
             }
             return hashes;
         }
