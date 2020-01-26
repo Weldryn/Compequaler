@@ -15,6 +15,7 @@ namespace Compequaler.Hash
         {
             if (x is RuntimeHash xRH && y is RuntimeHash yRH) return Equals(xRH, yRH);
             if (x is null && y is null) return true;
+            if (x is null != y is null) return false;
 
             throw new ArgumentException("Can't compare '" +
                 (x?.GetType().AssemblyQualifiedName ?? "<null>") + "' with '" +

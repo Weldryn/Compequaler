@@ -59,6 +59,14 @@ namespace Compequaler.Tests.Unit.Hash
             Assert.True(comparer.Equals(null, null));
         }
 
+        [Fact]
+        public void NonGenericEqualsShouldNotEquateOnOneNullObject()
+        {
+            IEqualityComparer comparer = new RuntimeHashEqualityComparer();
+            Assert.False(comparer.Equals(new object(), null));
+            Assert.False(comparer.Equals(null, new Version()));
+        }
+
         [Theory]
         [InlineAutoData]
         public void NonGenericEqualsShouldThrowOnOtherObjects(uint hashes1, uint hashes2)
@@ -67,7 +75,6 @@ namespace Compequaler.Tests.Unit.Hash
             IEqualityComparer comparer = new RuntimeHashEqualityComparer();
             Assert.Throws<ArgumentException>(() => comparer.Equals(hash1, hashes2));
             Assert.Throws<ArgumentException>(() => comparer.Equals(hash1, new object()));
-            Assert.Throws<ArgumentException>(() => comparer.Equals(hash1, null));
             Assert.Throws<ArgumentException>(() => comparer.Equals(hashes1, new object()));
         }
 
