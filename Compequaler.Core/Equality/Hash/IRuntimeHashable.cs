@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Compequaler.Hash
+namespace Compequaler.Equality.Hash
 {
 	public interface IRuntimeHashable
 	{

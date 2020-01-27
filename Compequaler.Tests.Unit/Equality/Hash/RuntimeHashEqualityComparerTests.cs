@@ -1,12 +1,12 @@
 ﻿using AutoFixture.Xunit2;
-using Compequaler.Hash;
+using Compequaler.Equality.Hash;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Compequaler.Tests.Unit.Hash
+namespace Compequaler.Tests.Unit.Equality.Hash
 {
     public class RuntimeHashEqualityComparerTests
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Compequaler.Hash
+namespace Compequaler.Equality.Hash
 {
     public class RuntimeHashEqualityComparer : IEqualityComparer<RuntimeHash>, IEqualityComparer
     {

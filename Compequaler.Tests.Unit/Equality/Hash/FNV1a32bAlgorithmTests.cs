@@ -1,11 +1,11 @@
-﻿using Compequaler.Hash;
+﻿using Compequaler.Equality.Hash;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Compequaler.Tests.Unit.Hash
+namespace Compequaler.Tests.Unit.Equality.Hash
 {
     public class FNV1a32bAlgorithmTests
     {

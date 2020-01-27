@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Compequaler.Hash
+namespace Compequaler.Equality.Hash
 {
     internal static class FNV1aAlgorithm
     {
