@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Compequaler.Equality.Hash.Implementations;
 
 namespace Compequaler.Equality.Hash
 {
 	public interface IRuntimeHashable
 	{
-		RuntimeHash Hash(RuntimeHash seed);
+		RuntimeHash GetRuntimeHash(RuntimeHash seed);
 	}
 }

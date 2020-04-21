@@ -31,6 +31,18 @@ namespace Compequaler.Tests.Unit
 
 
     [Serializable]
+    public class SuccessfulTestException : TestException
+    {
+        public SuccessfulTestException() { }
+        public SuccessfulTestException(string message) : base(message) { }
+        public SuccessfulTestException(string message, Exception inner) : base(message, inner) { }
+        protected SuccessfulTestException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+
+    [Serializable]
     public class TestInconclusiveException : TestException
     {
         public TestInconclusiveException() { }

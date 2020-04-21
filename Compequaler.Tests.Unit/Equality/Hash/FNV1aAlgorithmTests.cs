@@ -1,4 +1,4 @@
-﻿using Compequaler.Equality.Hash;
+﻿using Compequaler.Equality.Hash.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace Compequaler.Tests.Unit.Equality.Hash
 {
-    public class FNV1a32bAlgorithmTests
+    public class FNV1aAlgorithmTests
     {
         [Theory]
         [InlineData(FNV1aAlgorithm._factor32bits, 1, 0)]

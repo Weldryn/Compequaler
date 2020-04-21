@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Runtime.CompilerServices;
 
-namespace Compequaler.Equality.Hash
+namespace Compequaler.Equality.Hash.Implementations
 {
     internal static class FNV1aAlgorithm
     {
@@ -12,20 +9,12 @@ namespace Compequaler.Equality.Hash
         public const uint _seed32bits = 2166136261;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint FNVWithSeed(int hashCode)
-            => FNV(_seed32bits, hashCode);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint FNVWithSeed(uint hashCode)
-            => FNV(_seed32bits, hashCode);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FNV(uint hashes, int hashCode)
-            => FNV1a32Fast(hashes, hashCode);
+            => FNV1a32(hashes, hashCode);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FNV(uint hashes, uint hashCode)
-            => FNV1a32Fast(hashes, hashCode);
+            => FNV1a32(hashes, hashCode);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FNV1a32Fast(uint hashes, int hashCode)
