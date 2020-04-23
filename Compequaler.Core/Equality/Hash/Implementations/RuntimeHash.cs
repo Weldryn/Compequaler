@@ -1,4 +1,4 @@
-﻿using Compequaler.Comparer.Equality;
+﻿using Compequaler.Comparers.Equality;
 using Compequaler.Utilities;
 using System;
 using System.Runtime.CompilerServices;

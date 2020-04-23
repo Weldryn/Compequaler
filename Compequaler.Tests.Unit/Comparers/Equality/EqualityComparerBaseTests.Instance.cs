@@ -1,7 +1,7 @@
-﻿using Compequaler.Comparer.Equality.Implementations;
+﻿using Compequaler.Comparers.Equality.Implementations;
 using Xunit;
 
-namespace Compequaler.Tests.Unit.Comparer.Equality
+namespace Compequaler.Tests.Unit.Comparers.Equality
 {
 	public partial class EqualityComparerBaseTests
 	{

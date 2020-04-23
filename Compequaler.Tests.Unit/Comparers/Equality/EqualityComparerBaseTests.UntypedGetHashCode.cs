@@ -1,11 +1,11 @@
 ﻿using AutoFixture.Xunit2;
-using Compequaler.Comparer.Equality;
-using Compequaler.Comparer.Equality.Implementations;
+using Compequaler.Comparers.Equality;
+using Compequaler.Comparers.Equality.Implementations;
 using Compequaler.Equality.Hash;
 using System;
 using Xunit;
 
-namespace Compequaler.Tests.Unit.Comparer.Equality
+namespace Compequaler.Tests.Unit.Comparers.Equality
 {
 	public partial class EqualityComparerBaseTests
 	{

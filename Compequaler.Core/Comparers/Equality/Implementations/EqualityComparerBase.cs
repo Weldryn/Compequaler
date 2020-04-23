@@ -1,11 +1,9 @@
 ﻿using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
 using Compequaler.Utilities;
-using System;
-using System.Collections;
 using System.Runtime.CompilerServices;
 
-namespace Compequaler.Comparer.Equality.Implementations
+namespace Compequaler.Comparers.Equality.Implementations
 {
 	internal abstract class EqualityComparerBase<T>
 		: IEqualityComparer<T>,

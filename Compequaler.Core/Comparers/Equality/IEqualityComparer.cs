@@ -1,4 +1,4 @@
-﻿namespace Compequaler.Comparer.Equality
+﻿namespace Compequaler.Comparers.Equality
 {
 	public interface IEqualityComparer<in T> : System.Collections.Generic.IEqualityComparer<T>, IRuntimeHasher<T>
 	{

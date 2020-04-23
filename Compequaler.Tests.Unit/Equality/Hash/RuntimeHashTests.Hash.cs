@@ -1,4 +1,4 @@
-﻿using Compequaler.Comparer.Equality;
+﻿using Compequaler.Comparers.Equality;
 using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
 using Compequaler.Tests.Unit.Models;

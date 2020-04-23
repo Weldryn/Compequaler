@@ -1,4 +1,4 @@
-﻿using Compequaler.Comparer.Equality;
+﻿using Compequaler.Comparers.Equality;
 using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
 using System;
@@ -54,8 +54,8 @@ namespace Compequaler.Utilities
         internal static bool EqualsByRef(object first, object second)
             => ReferenceEquals(first, second);
 
-        internal static bool EqualsByType(Type type, object obj)
-            => obj != null && type.Equals(obj.GetType());
+        internal static bool EqualsByType(Type equalsToType, object obj)
+            => obj != null && equalsToType.Equals(obj.GetType());
 
         internal static int GetHashCodeByRef(object obj)
             => Hasher.Seed

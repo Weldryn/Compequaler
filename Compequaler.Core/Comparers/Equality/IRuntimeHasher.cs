@@ -1,6 +1,6 @@
 ﻿using Compequaler.Equality.Hash.Implementations;
 
-namespace Compequaler.Comparer.Equality
+namespace Compequaler.Comparers.Equality
 {
 	public interface IRuntimeHasher
 	{
