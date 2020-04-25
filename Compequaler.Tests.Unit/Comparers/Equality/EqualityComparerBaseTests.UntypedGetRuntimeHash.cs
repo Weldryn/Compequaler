@@ -97,7 +97,7 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 
 				public Func<RuntimeHash, T, RuntimeHash> GetRuntimeHashCoreImpl { get; set; }
 
-				protected override RuntimeHash GetRuntimeHashCore(RuntimeHash seed, T obj)
+				protected internal override RuntimeHash GetRuntimeHashCore(RuntimeHash seed, T obj)
 					=> GetRuntimeHashCoreImpl?.Invoke(seed, obj) ?? base.GetRuntimeHashCore(seed, obj);
 
 				public IEqualityComparer AsExplicitlyUntyped() => this;

@@ -159,7 +159,7 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 
 				public Func<T, T, bool> EqualsCoreImpl { get; set; }
 
-				protected override bool EqualsCore(T x, T y)
+				protected internal override bool EqualsCore(T x, T y)
 					=> EqualsCoreImpl?.Invoke(x, y) ?? base.EqualsCore(x, y);
 
 				public IEqualityComparer AsExplicitlyUntyped() => this;

@@ -26,9 +26,9 @@ namespace Compequaler.Comparers.Equality.Implementations
 			HandleNullsInGetHashes = canHandleNulls && shouldHandleNullsInGetHashes;
 		}
 
-		protected bool HandleNullsInEquals { get; }
+		protected internal bool HandleNullsInEquals { get; }
 
-		protected bool HandleNullsInGetHashes { get; }
+		protected internal bool HandleNullsInGetHashes { get; }
 
 		bool System.Collections.IEqualityComparer.Equals(object x, object y)
 		{
@@ -58,7 +58,11 @@ namespace Compequaler.Comparers.Equality.Implementations
 
 		public bool Equals(T x, T y)
 		{
-			if (Helper<T>.CanHandleNulls && ReferenceEquals(x, y)) return true;
+			if (Helper<T>.CanHandleNulls && ReferenceEquals(x, y) ||
+				Helper<T>.IsNullable && x == null && y == null)
+			{
+				return true;
+			}
 
 			if (HandleNullsInEquals)
 			{
@@ -68,7 +72,7 @@ namespace Compequaler.Comparers.Equality.Implementations
 			return EqualsCore(x, y);
 		}
 
-		protected virtual bool EqualsCore(T x, T y)
+		protected internal virtual bool EqualsCore(T x, T y)
 			=> System.Collections.Generic.EqualityComparer<T>.Default.Equals(x, y);
 
 		int System.Collections.IEqualityComparer.GetHashCode(object obj)
@@ -95,7 +99,7 @@ namespace Compequaler.Comparers.Equality.Implementations
 			return GetHashCodeCore(obj);
 		}
 
-		protected virtual int GetHashCodeCore(T obj)
+		protected internal virtual int GetHashCodeCore(T obj)
 			=> GetRuntimeHashCore(Hasher.Seed, obj).GetHashCode();
 
 		RuntimeHash IRuntimeHasher.GetRuntimeHash(RuntimeHash seed, object obj)
@@ -121,7 +125,7 @@ namespace Compequaler.Comparers.Equality.Implementations
 			return GetRuntimeHashCore(seed, obj);
 		}
 
-		protected virtual RuntimeHash GetRuntimeHashCore(RuntimeHash seed, T obj)
+		protected internal virtual RuntimeHash GetRuntimeHashCore(RuntimeHash seed, T obj)
 			=> seed.Hash(obj, DefaultEqualityComparer<T>.Instance);
 
 		public override bool Equals(object obj)

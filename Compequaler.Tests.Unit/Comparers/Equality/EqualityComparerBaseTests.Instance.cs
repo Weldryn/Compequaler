@@ -52,10 +52,6 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 						  shouldHandleNullsInGetHashes)
 				{
 				}
-
-				public bool HandleNullsInEquals => base.HandleNullsInEquals;
-
-				public bool HandleNullsInGetHashes => base.HandleNullsInGetHashes;
 			}
 		}
 	}

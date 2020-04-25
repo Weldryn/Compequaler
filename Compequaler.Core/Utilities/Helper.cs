@@ -11,6 +11,8 @@ namespace Compequaler.Utilities
     {
         public static bool CanHandleNulls { get; } = default(T) == null;
 
+        public static bool IsNullable { get; } = Nullable.GetUnderlyingType(typeof(T)) != null;
+
 #if NETSTANDARD1_6
         public static bool IsHashableType 
             => typeof(IRuntimeHashable).GetTypeInfo().IsAssignableFrom(typeof(T));

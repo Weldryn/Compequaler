@@ -62,7 +62,7 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 
 				public Func<T, int> GetHashCodeCoreImpl { get; set; }
 
-				protected override int GetHashCodeCore(T obj)
+				protected internal override int GetHashCodeCore(T obj)
 					=> GetHashCodeCoreImpl?.Invoke(obj) ?? base.GetHashCodeCore(obj);
 
 				public IEqualityComparer<T> AsExplicitlyTyped() => this;
