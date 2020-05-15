@@ -58,15 +58,18 @@ namespace Compequaler.Comparers.Equality.Implementations
 
 		public bool Equals(T x, T y)
 		{
-			if (Helper<T>.CanHandleNulls && ReferenceEquals(x, y) ||
-				Helper<T>.IsNullable && x == null && y == null)
+			if (Helper<T>.IsReference)
+			{
+				if (ReferenceEquals(x, y)) return true;
+			}
+			else if (Helper<T>.IsNull(x) && Helper<T>.IsNull(y))
 			{
 				return true;
 			}
 
 			if (HandleNullsInEquals)
 			{
-				if (x == null || y == null) return false;
+				if (Helper<T>.IsNull(x) || Helper<T>.IsNull(y)) return false;
 			}
 
 			return EqualsCore(x, y);
@@ -93,7 +96,7 @@ namespace Compequaler.Comparers.Equality.Implementations
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int GetHashCode(T obj)
 		{
-			if (HandleNullsInGetHashes && obj == null)
+			if (HandleNullsInGetHashes && Helper<T>.IsNull(obj))
 				return Hasher.NullHashedSeedHashCode;
 
 			return GetHashCodeCore(obj);
@@ -119,7 +122,7 @@ namespace Compequaler.Comparers.Equality.Implementations
 
 		public RuntimeHash GetRuntimeHash(RuntimeHash seed, T obj)
 		{
-			if (HandleNullsInGetHashes && obj == null)
+			if (HandleNullsInGetHashes && Helper<T>.IsNull(obj))
 				return seed.HashNull();
 
 			return GetRuntimeHashCore(seed, obj);

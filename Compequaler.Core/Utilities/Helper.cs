@@ -2,26 +2,38 @@
 using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Compequaler.Utilities
 {
     internal static class Helper<T>
     {
+        static Helper()
+        {
+#if NETSTANDARD1_6
+            var type = typeof(T);
+            var typeInfo = type.GetTypeInfo();
+            IsHashable = typeof(IRuntimeHashable).GetTypeInfo().IsAssignableFrom(type);
+            IsReference = typeInfo.IsClass || typeInfo.IsInterface;
+            IsRuntimeHash = typeInfo.Equals(typeof(RuntimeHash));
+#else
+            var type = typeof(T);
+            IsHashable = typeof(IRuntimeHashable).IsAssignableFrom(type);
+            IsReference = type.IsClass || type.IsInterface;
+            IsRuntimeHash = type.Equals(typeof(RuntimeHash));
+#endif
+        }
+
         public static bool CanHandleNulls { get; } = default(T) == null;
 
-        public static bool IsNullable { get; } = Nullable.GetUnderlyingType(typeof(T)) != null;
+        public static bool IsHashable { get; }
 
-#if NETSTANDARD1_6
-        public static bool IsHashableType 
-            => typeof(IRuntimeHashable).GetTypeInfo().IsAssignableFrom(typeof(T));
-#else
-        public static bool IsHashableType 
-            => typeof(IRuntimeHashable).IsAssignableFrom(typeof(T));
-#endif
+        public static bool IsReference { get; }
 
-        public static bool IsRuntimeHashType => typeof(T).Equals(typeof(RuntimeHash));
+        public static bool IsRuntimeHash { get; }
 
         public static bool TryGetHasherFromNormalisedComparer(
             ref System.Collections.Generic.IEqualityComparer<T> comparer,
@@ -41,6 +53,15 @@ namespace Compequaler.Utilities
         public static IEqualityComparer<T> Normalise(IEqualityComparer<T> comparer)
             => comparer ?? DefaultEqualityComparer<T>.Instance;
 
+        /// <summary>
+        /// Let <typeparamref name="T"/> be anything, checks for null without boxing
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNull(T obj)
+            => !CanHandleNulls ? false : obj == null;
+
         public static Exception CreateNotEquatableException(object x, object y)
             => new ArgumentException("Equality comparer of " + typeof(T).FullName + ": can't compare '" +
                 (x?.GetType().AssemblyQualifiedName ?? "<null>") + "' with '" +
@@ -53,6 +74,8 @@ namespace Compequaler.Utilities
 
     internal static class Helper
     {
+        static Helper() { }
+
         internal static bool EqualsByRef(object first, object second)
             => ReferenceEquals(first, second);
 

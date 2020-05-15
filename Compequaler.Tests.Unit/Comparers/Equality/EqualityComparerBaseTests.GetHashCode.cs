@@ -1,7 +1,6 @@
-﻿using AutoFixture.Xunit2;
-using Compequaler.Comparers.Equality;
+﻿using Compequaler.Comparers.Equality;
 using Compequaler.Comparers.Equality.Implementations;
-using Compequaler.Equality.Hash;
+using Compequaler.Equality.Hash.Implementations;
 using System;
 using Xunit;
 
@@ -12,14 +11,25 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 		public class GetHashCode
 		{
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
-			public void ShouldDelegateToImplForRefTypes(bool handleNulls, object model)
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForRefTypes(bool handleNulls)
 			{
 				var sut = new TestableEqualityComparerBase<object>(handleNulls)
 					.ThrowsOnImplCall(() => new SuccessfulTestException())
 					.AsExplicitlyTyped();
-				Assert.Throws<SuccessfulTestException>(() => sut.GetHashCode(model));
+				Assert.Throws<SuccessfulTestException>(() => sut.GetHashCode(new object()));
+			}
+
+			[Theory]
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyTyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.GetHashCode(1));
 			}
 
 			[Theory]
@@ -48,7 +58,28 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 				var sut = new TestableEqualityComparerBase<object>(true)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyTyped();
-				var expected = Hasher.Seed.Hash<object>(null).GetHashCode();
+				var expected = System.Collections.Generic.EqualityComparer<object>.Default.GetHashCode(null);
+				expected = FNV1aAlgorithm.XORFold31(FNV1aAlgorithm.FNV(FNV1aAlgorithm._seed32bits, expected));
+				Assert.Equal(expected, sut.GetHashCode(null));
+			}
+
+			[Fact]
+			public void ShouldDelegateToImplOnNullWhenNotHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<int?>(false)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyTyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.GetHashCode(null));
+			}
+
+			[Fact]
+			public void ShouldReturnOnNullWhenHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<int?>(true)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyTyped();
+				var expected = System.Collections.Generic.EqualityComparer<int?>.Default.GetHashCode(null);
+				expected = FNV1aAlgorithm.XORFold31(FNV1aAlgorithm.FNV(FNV1aAlgorithm._seed32bits, expected));
 				Assert.Equal(expected, sut.GetHashCode(null));
 			}
 

@@ -1,5 +1,4 @@
-﻿using AutoFixture.Xunit2;
-using Compequaler.Comparers.Equality;
+﻿using Compequaler.Comparers.Equality;
 using Compequaler.Comparers.Equality.Implementations;
 using System;
 using Xunit;
@@ -8,7 +7,9 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 {
 	public partial class EqualityComparerBaseTests
 	{
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
 		public class Equals
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 		{
 			[Theory]
 			[InlineData(true)]
@@ -22,8 +23,19 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			}
 
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForSameNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyTyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(1, 1));
+			}
+
+			[Theory]
+			[InlineData(true)]
+			[InlineData(false)]
 			public void ShouldDelegateToImplForDifferentValueTypes(bool handleNulls)
 			{
 				var sut = new TestableEqualityComparerBase<int>(handleNulls)
@@ -33,28 +45,37 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			}
 
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
-			public void ShouldDelegateToImplForDifferentRefTypes(
-				bool handleNulls,
-				object model1,
-				object model2)
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForDifferentNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyTyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(1, 2));
+			}
+
+			[Theory]
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForDifferentRefTypes(bool handleNulls)
 			{
 				var sut = new TestableEqualityComparerBase<object>(handleNulls)
 					.ThrowsOnImplCall(() => new SuccessfulTestException())
 					.AsExplicitlyTyped();
-				Assert.Throws<SuccessfulTestException>(() => sut.Equals(model1, model2));
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(new object(), new object()));
 			}
 
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
-			public void ShouldNotDelegateToImplAndEquateForSameRefTypes(bool handleNulls, object model)
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldNotDelegateToImplAndEquateForSameRefTypes(bool handleNulls)
 			{
 				var sut = new TestableEqualityComparerBase<object>(handleNulls)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyTyped();
-				Assert.True(sut.Equals(model, model));
+				var reference = new object();
+				Assert.True(sut.Equals(reference, reference));
 			}
 
 			[Theory]
@@ -69,23 +90,44 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			}
 
 			[Theory]
-			[AutoData]
-			public void ShouldNotEquateOnSingleNullWhenHandlingNullsForRefTypes(object reference)
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldEquateOnNullsForNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyTyped();
+				Assert.True(sut.Equals(null, null));
+			}
+
+			[Fact]
+			public void ShouldNotEquateOnSingleNullWhenHandlingNullsForRefTypes()
 			{
 				var sut = new TestableEqualityComparerBase<object>(true)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyTyped();
+				var reference = new object();
 				Assert.False(sut.Equals(null, reference));
 				Assert.False(sut.Equals(reference, null));
 			}
 
-			[Theory]
-			[AutoData]
-			public void ShouldDelegateToImplOnSingleNullWhenNotHandlingNullsForRefTypes(object reference)
+			[Fact]
+			public void ShouldNotEquateOnSingleNullWhenHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<object>(true)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyTyped();
+				Assert.False(sut.Equals(null, 1));
+				Assert.False(sut.Equals(1, null));
+			}
+
+			[Fact]
+			public void ShouldDelegateToImplOnSingleNullWhenNotHandlingNullsForRefTypes()
 			{
 				var sut = new TestableEqualityComparerBase<object>(false)
 					.ThrowsOnImplCall(() => new SuccessfulTestException())
 					.AsExplicitlyTyped();
+				var reference = new object();
 				Assert.Throws<SuccessfulTestException>(() => sut.Equals(null, reference));
 				Assert.Throws<SuccessfulTestException>(() => sut.Equals(reference, null));
 			}

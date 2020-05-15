@@ -1,5 +1,4 @@
-﻿using AutoFixture.Xunit2;
-using Compequaler.Comparers.Equality;
+﻿using Compequaler.Comparers.Equality;
 using Compequaler.Comparers.Equality.Implementations;
 using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
@@ -13,14 +12,25 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 		public class GetRuntimeHash
 		{
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
-			public void ShouldDelegateToImplForRefTypes(bool handleNulls, Version model)
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForRefTypes(bool handleNulls)
 			{
-				var sut = new TestableEqualityComparerBase<Version>(handleNulls)
+				var sut = new TestableEqualityComparerBase<object>(handleNulls)
 					.ThrowsOnImplCall(() => new SuccessfulTestException())
 					.AsExplicitlyTyped();
-				Assert.Throws<SuccessfulTestException>(() => sut.GetRuntimeHash(Hasher.Seed, model));
+				Assert.Throws<SuccessfulTestException>(() => sut.GetRuntimeHash(Hasher.Seed, new object()));
+			}
+
+			[Theory]
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyTyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.GetRuntimeHash(Hasher.Seed, 1));
 			}
 
 			[Theory]
@@ -37,7 +47,7 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			[Fact]
 			public void ShouldDelegateToImplOnNullWhenNotHandlingNullsForRefTypes()
 			{
-				var sut = new TestableEqualityComparerBase<Version>(false)
+				var sut = new TestableEqualityComparerBase<object>(false)
 					.ThrowsOnImplCall(() => new SuccessfulTestException())
 					.AsExplicitlyTyped();
 				Assert.Throws<SuccessfulTestException>(() => sut.GetRuntimeHash(Hasher.Seed, null));
@@ -46,7 +56,26 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			[Fact]
 			public void ShouldReturnOnNullWhenHandlingNullsForRefTypes()
 			{
-				var sut = new TestableEqualityComparerBase<Version>(true)
+				var sut = new TestableEqualityComparerBase<object>(true)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyTyped();
+				var expected = Hasher.Seed.Hash<Version>(null);
+				Assert.Equal(expected, sut.GetRuntimeHash(Hasher.Seed, null));
+			}
+
+			[Fact]
+			public void ShouldDelegateToImplOnNullWhenNotHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<int?>(false)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyTyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.GetRuntimeHash(Hasher.Seed, null));
+			}
+
+			[Fact]
+			public void ShouldReturnOnNullWhenHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<int?>(true)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyTyped();
 				var expected = Hasher.Seed.Hash<Version>(null);

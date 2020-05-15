@@ -33,6 +33,28 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			}
 
 			[Theory]
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldDelegateToImplForSameNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyUntyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(1, 1));
+			}
+
+			[Theory]
+			[InlineAutoData(true)]
+			[InlineAutoData(false)]
+			public void ShouldDelegateToImplForDifferentNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyUntyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(1, 2));
+			}
+
+			[Theory]
 			[InlineAutoData(true)]
 			[InlineAutoData(false)]
 			public void ShouldDelegateToImplForDifferentRefTypes(
@@ -63,6 +85,17 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 			public void ShouldEquateOnNullsForValueTypes(bool handleNulls)
 			{
 				var sut = new TestableEqualityComparerBase<int>(handleNulls)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyUntyped();
+				Assert.True(sut.Equals(null, null));
+			}
+
+			[Theory]
+			[InlineData(true)]
+			[InlineData(false)]
+			public void ShouldEquateOnNullsForNullableTypes(bool handleNulls)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handleNulls)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyUntyped();
 				Assert.True(sut.Equals(null, null));
@@ -113,40 +146,73 @@ namespace Compequaler.Tests.Unit.Comparers.Equality
 				Assert.Throws<SuccessfulTestException>(() => sut.Equals(reference, null));
 			}
 
+			[Fact]
+			public void ShouldNotEquateOnSingleNullWhenHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<int?>(true)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyUntyped();
+				Assert.False(sut.Equals(null, 1));
+				Assert.False(sut.Equals(1, null));
+			}
+
+			[Fact]
+			public void ShouldDelegateToImplOnSingleNullWhenNotHandlingNullsForNullableTypes()
+			{
+				var sut = new TestableEqualityComparerBase<int?>(false)
+					.ThrowsOnImplCall(() => new SuccessfulTestException())
+					.AsExplicitlyUntyped();
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(null, 1));
+				Assert.Throws<SuccessfulTestException>(() => sut.Equals(1, null));
+			}
+
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
+			[InlineAutoData(true, "sthqrg")]
+			[InlineAutoData(true, 1)]
+			[InlineAutoData(false, "sthqrg")]
+			[InlineAutoData(false, 1)]
 			public void ShouldThrowOnAnyUnsupportedTypeForRefTypes(
 				bool handlingNulls,
-				Version model,
-				object model1,
-				Uri model2)
+				object other,
+				Version model)
 			{
 				var sut = new TestableEqualityComparerBase<Version>(handlingNulls)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyUntyped();
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model1, model));
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model, model1));
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model2, model1));
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model1, model2));
+				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(other, model));
+				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model, other));
 			}
 
 			[Theory]
-			[InlineAutoData(true)]
-			[InlineAutoData(false)]
+			[InlineData(true, "qdrgqerg")]
+			[InlineData(true, 1.0)]
+			[InlineData(false, "qdrgqerg")]
+			[InlineData(false, 1.0)]
 			public void ShouldThrowOnAnyUnsupportedTypeForValTypes(
 				bool handlingNulls,
-				int value,
-				double value1,
 				object model)
 			{
 				var sut = new TestableEqualityComparerBase<int>(handlingNulls)
 					.ThrowsOnImplCall(() => new FailedTestException())
 					.AsExplicitlyUntyped();
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(value1, value));
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(value, value1));
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model, value1));
-				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(value1, model));
+				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model, 1));
+				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(1, model));
+			}
+
+			[Theory]
+			[InlineData(true, "drdru")]
+			[InlineData(true, 1.0)]
+			[InlineData(false, "drdru")]
+			[InlineData(false, 1.0)]
+			public void ShouldThrowOnAnyUnsupportedTypeForNullableTypes(
+				bool handlingNulls,
+				object model)
+			{
+				var sut = new TestableEqualityComparerBase<int?>(handlingNulls)
+					.ThrowsOnImplCall(() => new FailedTestException())
+					.AsExplicitlyUntyped();
+				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(model, 1));
+				Assert.ThrowsAny<ArgumentException>(() => sut.Equals(1, model));
 			}
 
 			private class TestableEqualityComparerBase<T> : EqualityComparerBase<T>
