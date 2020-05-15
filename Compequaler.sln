@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compequaler.Core", "Compequaler.Core\Compequaler.Core.csproj", "{DC87E075-4D52-4CA5-B088-614C5B8AD5DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compequaler.Tests.Unit", "Compequaler.Tests.Unit\Compequaler.Tests.Unit.csproj", "{46A49150-EE8B-422E-8ECF-8867971AB388}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compequaler.Tests.Unit", "Compequaler.Tests.Unit\Compequaler.Tests.Unit.csproj", "{46A49150-EE8B-422E-8ECF-8867971AB388}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C148DBD5-37A0-43D7-992D-07BF5F475695}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

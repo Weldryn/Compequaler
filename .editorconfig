@@ -1,0 +1,13 @@
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+
+# All files
+[*]
+
+# Cs files
+[*.cs]
+indent_style = tab
+indent_size = 4
+end_of_line = crlf
+
+# 'using' directive preferences
+csharp_using_directive_placement = outside_namespace:silent

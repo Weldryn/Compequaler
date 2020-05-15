@@ -1,8 +1,6 @@
-﻿using AutoFixture.Xunit2;
-using Compequaler.Comparers.Equality.Implementations;
+﻿using Compequaler.Comparers.Equality.Implementations;
 using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
-using Compequaler.Utilities;
 using System.Collections.Generic;
 using Xunit;
 
