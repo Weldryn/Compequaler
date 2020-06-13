@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Compequaler.Tests.Unit
 {
-
-    [Serializable]
+	[Serializable]
     public class TestException : Exception
     {
         public TestException() { }
@@ -29,7 +26,6 @@ namespace Compequaler.Tests.Unit
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 
-
     [Serializable]
     public class SuccessfulTestException : TestException
     {
@@ -41,16 +37,14 @@ namespace Compequaler.Tests.Unit
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 
-
-    [Serializable]
-    public class TestInconclusiveException : TestException
-    {
-        public TestInconclusiveException() { }
-        public TestInconclusiveException(Expression<Func<bool>> expr) : base(expr.Body.ToString()) { }
-        public TestInconclusiveException(string message) : base(message) { }
-        public TestInconclusiveException(string message, Exception inner) : base(message, inner) { }
-        protected TestInconclusiveException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-    }
+	[Serializable]
+	public class SetupTestException : TestException
+	{
+		public SetupTestException() { }
+		public SetupTestException(string message) : base(message) { }
+		public SetupTestException(string message, Exception inner) : base(message, inner) { }
+		protected SetupTestException(
+		  System.Runtime.Serialization.SerializationInfo info,
+		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+	}
 }

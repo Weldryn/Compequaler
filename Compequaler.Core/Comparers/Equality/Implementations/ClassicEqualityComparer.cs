@@ -1,9 +1,8 @@
 ﻿using Compequaler.Equality.Hash.Implementations;
-using System.Collections;
 
 namespace Compequaler.Comparers.Equality.Implementations
 {
-	internal sealed class NonHashableDefaultEqualityComparer<T>
+	internal sealed class ClassicEqualityComparer<T>
 		: EqualityComparerBase<T>,
 		IEqualityComparer<T>,
 		IRuntimeHasher<T>,
@@ -12,16 +11,9 @@ namespace Compequaler.Comparers.Equality.Implementations
 		IRuntimeHasher,
 		System.Collections.IEqualityComparer
 	{
-		public NonHashableDefaultEqualityComparer() : base(true) { }
+		public ClassicEqualityComparer() : base(true) { }
 
 		protected internal override RuntimeHash GetRuntimeHashCore(RuntimeHash seed, T obj)
 			=> seed.HashRaw(obj, System.Collections.Generic.EqualityComparer<T>.Default);
-
-		public override string ToString()
-		{
-			var type = typeof(DefaultEqualityComparer<>);
-
-			return type.Namespace + "." + type.Name + "'1<" + typeof(T).FullName + ">";
-		}
 	}
 }

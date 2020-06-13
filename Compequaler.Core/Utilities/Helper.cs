@@ -2,25 +2,25 @@
 using Compequaler.Equality.Hash;
 using Compequaler.Equality.Hash.Implementations;
 using System;
-using System.Linq.Expressions;
+#if NETSTANDARD1_0
 using System.Reflection;
+#endif
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace Compequaler.Utilities
 {
-    internal static class Helper<T>
+	internal static class Helper<T>
     {
         static Helper()
         {
-#if NETSTANDARD1_6
             var type = typeof(T);
+
+#if NETSTANDARD1_0
             var typeInfo = type.GetTypeInfo();
-            IsHashable = typeof(IRuntimeHashable).GetTypeInfo().IsAssignableFrom(type);
+            IsHashable = typeof(IRuntimeHashable).GetTypeInfo().IsAssignableFrom(typeInfo);
             IsReference = typeInfo.IsClass || typeInfo.IsInterface;
             IsRuntimeHash = typeInfo.Equals(typeof(RuntimeHash));
 #else
-            var type = typeof(T);
             IsHashable = typeof(IRuntimeHashable).IsAssignableFrom(type);
             IsReference = type.IsClass || type.IsInterface;
             IsRuntimeHash = type.Equals(typeof(RuntimeHash));

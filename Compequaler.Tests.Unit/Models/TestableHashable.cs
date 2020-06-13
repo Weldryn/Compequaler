@@ -2,7 +2,6 @@
 using Compequaler.Equality.Hash.Implementations;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Compequaler.Tests.Unit.Models
 {
